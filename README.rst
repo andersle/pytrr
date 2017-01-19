@@ -16,3 +16,11 @@ Example
            print(frame['step'])
            frame_data = trrfile.get_data()
            print(frame_data['x'][0])
+
+
+Installation
+============
+
+pytrr can be installed via pip:
+
+``pip install pytrr``
