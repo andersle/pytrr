@@ -1,2 +1,4 @@
-# pytrr
-pytrr is a package for reading .trr files from GROMACS.
+pytrr
+=====
+
+pytrr is a python package for reading .trr files from GROMACS.
