@@ -35,7 +35,7 @@ def get_long_description():
     return long_description
 
 
-FULL_VERSION = '0.2.0.dev2'  # copied from version.py generated.
+FULL_VERSION = '0.3.0'  # copied from version.py generated.
 
 setup(name='pytrr',
       version=FULL_VERSION,
