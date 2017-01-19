@@ -13,3 +13,4 @@ with GroTrrReader('traj.trr') as trrfile:
         frame_data = trrfile.get_data()
         print(frame_data['x'][0])
 ```
+

@@ -16,7 +16,7 @@ MAJOR = 0
 MINOR = 1
 MICRO = 0
 DEV = 0
-ISRELEASED = False
+ISRELEASED = True
 if not ISRELEASED:
     VERSION = '{:d}.{:d}.{:d}.dev{:d}'.format(MAJOR, MINOR, MICRO, DEV)
 else:
