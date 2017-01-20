@@ -2,7 +2,11 @@
 pytrr
 #####
 
-pytrr is a python package for reading .trr files from GROMACS.
+``pytrr`` is a python package for reading .trr [1]_ files from GROMACS [2]_.
+
+It's intended as a lightweight, pure python, library for reading .trr
+trajectories and it access to positions, velocities, etc.
+as numpy arrays.
 
 Example
 =======
@@ -24,3 +28,10 @@ Installation
 pytrr can be installed via pip:
 
 ``pip install pytrr``
+
+
+References
+==========
+
+.. [1] http://www.gromacs.org/Developer_Zone/Programming_Guide/XTC_Library
+.. [2] http://www.gromacs.org/
