@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/andersle/pytrr.svg?branch=master)](https://travis-ci.org/andersle/pytrr)
+
+
 #####
 pytrr
 #####
