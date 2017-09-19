@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/andersle/pytrr.svg?branch=master)](https://travis-ci.org/andersle/pytrr)
+.. image:: https://travis-ci.org/andersle/pytrr.svg?branch=master
+    :target: https://travis-ci.org/andersle/pytrr
 
 
 #####
