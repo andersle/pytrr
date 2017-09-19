@@ -8,7 +8,7 @@ python:
 
 
 before_script:
-  - apt-get update -qy
+  - sudo apt-get update -qq
   - pip install --upgrade pip
   - pip install coverage
   - pip install pep8
