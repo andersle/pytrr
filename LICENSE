@@ -1,7 +1,7 @@
-pytrr - A library for rare event simulations.
-Copyright (C) 2017  The pytrr team
+pytrr - A package for reading GROMACS .trr files
+Copyright (C) 2017, Anders Lervik
 
-pytrr is released under the GNU Lesser General Public License v3.0.
+pytrr is released under the GNU Lesser General Public License v2.1+.
 Please see the files: COPYING and COPYING.LESSER included in the source
 directory.
 
@@ -16,10 +16,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LILGPLv3ED TO THE WARRANTIES OF MERCHANTABILITY,
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-

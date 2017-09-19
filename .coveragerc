@@ -1,0 +1,14 @@
+[report]
+omit = 
+    */python?.?/*
+    */site-packages/numpy/*
+    */test/*
+    */setup.py
+    */setup_version.py
+    ./pytrr/version.py
+exclude_lines = 
+    pragma: no cover
+    def __repr__
+    def __str__
+    raise NotImplementedError
+    @abstractmethod

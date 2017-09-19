@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017, AL.
-# Distributed under the LGPLv3 License. See LICENSE for more info
+# Copyright (c) 2017, Anders Lervik.
+# Distributed under the LGPLv2.1+ License. See LICENSE for more info.
 """
 #####
 pytrr
@@ -8,7 +8,7 @@ pytrr
 
 This is pytrr - A package for reading GROMACS .trr files.
 
-Copyright (C) 2017, AL.
+Copyright (C) 2017, Anders Lervik.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,19 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LILGPLv3ED TO THE WARRANTIES OF MERCHANTABILITY,
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 """
 from .version import VERSION as __version__
-from .pytrr import GroTrrReader
-from .pytrr import read_trr_header, read_trr_data, skip_trr_data
+from .pytrr import (
+    GroTrrReader,
+    read_trr_header,
+    read_trr_data,
+    skip_trr_data,
+    write_trr_frame,
+)

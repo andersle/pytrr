@@ -1,29 +1,32 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017, AL.
-# Distributed under the LGPLv3 License. See LICENSE for more info.
-"""A simple module for reading GROMACS .trr files.
+# Copyright (c) 2017, Anders Lervik.
+# Distributed under the LGPLv2.1+ License. See LICENSE for more info.
+"""A simple module for reading GROMACS TRR files.
 
-This module defines some methods and a class for reading .trr files from
+This module defines some methods and a class for reading TRR files from
 GROMACS.
 
 Useful methods defined here
 ---------------------------
 
 read_trr_header
-    Read a header from an open .trr file.
+    Read a header from an open TRR file.
 
 read_trr_data
-    Read data from an open .trr file.
+    Read data from an open TRR file.
 
 skip_trr_data
-    Skip reading data from an open .trr file and move on to the
+    Skip reading data from an open TRR file and move on to the
     next header.
+
+write_trr_frame
+    Write data to a TRR file.
 
 Useful classes defined here
 ---------------------------
 
 GroTrrReader
-    A class for opening and reading .trr files in a "file-like"
+    A class for opening and reading TRR files in a "file-like"
     manner (see the example below).
 
 Example
@@ -42,12 +45,13 @@ import numpy as np
 GROMACS_MAGIC = 1993
 DIM = 3
 TRR_VERSION = 'GMX_trn_file'
+TRR_VERSION_B = b'GMX_trn_file'
 SIZE_FLOAT = struct.calcsize('f')
 SIZE_DOUBLE = struct.calcsize('d')
 HEAD_FMT = '{}13i'
-HEAD_ITEMS = ['ir_size', 'e_size', 'box_size', 'vir_size', 'pres_size',
+HEAD_ITEMS = ('ir_size', 'e_size', 'box_size', 'vir_size', 'pres_size',
               'top_size', 'sym_size', 'x_size', 'v_size', 'f_size',
-              'natoms', 'step', 'nre', 'time', 'lambda']
+              'natoms', 'step', 'nre', 'time', 'lambda')
 DATA_ITEMS = ('box_size', 'vir_size', 'pres_size',
               'x_size', 'v_size', 'f_size')
 
@@ -97,7 +101,7 @@ def read_struct_buff(fileh, fmt):
 
 
 def read_matrix(fileh, endian, double):
-    """Read a matrix from the .trr file.
+    """Read a matrix from the TRR file.
 
     Here, we assume that the matrix will be of
     dimensions (DIM, DIM).
@@ -130,9 +134,9 @@ def read_matrix(fileh, endian, double):
 
 
 def read_coord(fileh, endian, double, natoms):
-    """Read a coordinate section from the .trr file.
+    """Read a coordinate section from the TRR file.
 
-    This method will read the full coordinate section from a .trr
+    This method will read the full coordinate section from a TRR 
     file. The coordinate section may be positions, velocities or
     forces.
 
@@ -168,14 +172,14 @@ def is_double(header):
     """Determines we we should use double precision.
 
     This method determined the precision to use when reading
-    the .trr file. This is based on the header read for a given
+    the TRR file. This is based on the header read for a given
     frame which defines the sizes of certain "fields" like the box
     or the positions. From this size, the precision can be obtained.
 
     Parameters
     ----------
     header : dict
-        The header read from the .trr file.
+        The header read from the TRR file.
 
     Returns
     -------
@@ -199,7 +203,7 @@ def is_double(header):
 
 
 def read_trr_header(fileh):
-    """Read a header from a .trr file.
+    """Read a header from a TRR file.
 
     Parameters
     ----------
@@ -251,7 +255,7 @@ def skip_trr_data(fileh, header):
     """Skip coordinates/box data etc.
 
     This method is used when we want to skip a data section in
-    the .trr file. Rather than reading the data it will use the
+    the TRR file. Rather than reading the data it will use the
     sized read in the header to skip ahead to the next frame.
 
     Parameters
@@ -259,7 +263,7 @@ def skip_trr_data(fileh, header):
     fileh : file object
         The file handle for the file we are reading.
     header : dict
-        The header read from the .trr file.
+        The header read from the TRR file.
     """
     offset = sum([header[key] for key in DATA_ITEMS])
     fileh.seek(offset, 1)
@@ -267,7 +271,7 @@ def skip_trr_data(fileh, header):
 
 
 def read_trr_data(fileh, header):
-    """Read box, cooridnates etc. from a .trr file.
+    """Read box, coordinates etc. from a TRR file.
 
     Parameters
     ----------
@@ -304,8 +308,93 @@ def read_trr_data(fileh, header):
     return data
 
 
+def _write_trr_header(outfile, header, floatfmt, endian=None):
+    """Helper method for writing a header to a TRR file.
+
+    Parameters
+    ----------
+    outfile : filehandle
+        The file we can write to.
+    header : dict
+        The header data for the TRR file.
+    floatfmt : string
+        The string which gives the format for floats. It should indicate
+        if we are writing for double or single precision.
+    endian : string, optional
+        Can be used to force endianess.
+    """
+    slen = (13, 12)
+    fmt = ['1i', '2i', '{}s'.format(slen[0] - 1), '13i']
+    if endian:
+        fmt = [endian + i for i in fmt]
+    outfile.write(struct.pack(fmt[0], GROMACS_MAGIC))
+    outfile.write(struct.pack(fmt[1], *slen))
+    outfile.write(struct.pack(fmt[2], TRR_VERSION_B))
+    head = [header[key] for key in HEAD_ITEMS[:13]]
+    outfile.write(struct.pack(fmt[3], *head))
+    outfile.write(struct.pack(floatfmt.format(1), header['time']))
+    outfile.write(struct.pack(floatfmt.format(1), header['lambda']))
+
+
+def write_trr_frame(filename, data, endian=None, double=False, append=False):
+    """Write data in TRR format to a file.
+
+    Parameters
+    ----------
+    filename : string
+        The file we will write to.
+    data : dict
+        The data we will write to the file.
+    endian : string, optional
+        Select the byte order; big-endian or little-endian. If not
+        specified, the native byte order will be used.
+    double : boolean, optional
+        If True, we will write in double precision.
+    append : boolean, optional
+        If True, we will append to the given file.
+    """
+    if double:
+        size = SIZE_DOUBLE
+        floatfmt = '{}d'
+    else:
+        size = SIZE_FLOAT
+        floatfmt = '{}f'
+    if endian:
+        floatfmt = endian + floatfmt
+
+    header = {}
+    for key in HEAD_ITEMS:
+        header[key] = 0
+
+    header['natoms'] = data['natoms']
+    header['step'] = data['step']
+    header['box_size'] = size * DIM * DIM
+    for i in ('x', 'v', 'f'):
+        if i in data:
+            header['{}_size'.format(i)] = data['natoms'] * size * DIM
+    header['endian'] = endian
+    header['double'] = double
+    header['time'] = data['time']
+    header['lambda'] = data['lambda']
+
+    if append:
+        mode = 'ab'
+    else:
+        mode = 'wb'
+    with open(filename, mode) as outfile:
+        _write_trr_header(outfile, header, floatfmt, endian=endian)
+        for key in DATA_ITEMS:
+            if header[key] != 0:
+                # Note: We assume that the data is a numpy array, and that
+                # we can find it as data['x'], data['v'], ... and so on.
+                matrix = data[key.split('_')[0]]
+                fmt = floatfmt.format(matrix.size)
+                outfile.write(struct.pack(fmt, *matrix.flatten()))
+    return header
+
+
 class GroTrrReader():
-    """A simple class for reading frames from a GROMACS .trr file.
+    """A simple class for reading frames from a GROMACS TRR file.
 
     Attributes
     ----------
@@ -318,7 +407,7 @@ class GroTrrReader():
     fileh : file object
         The open file handle.
     header : dict
-        The previously read header from the .trr file.
+        The previously read header from the TRR file.
     """
 
     def __init__(self, filename):
@@ -398,4 +487,5 @@ class GroTrrReader():
     def skip_data(self):
         """Just skip data."""
         self._skip = False
+        print(self.header)
         skip_trr_data(self.fileh, self.header)

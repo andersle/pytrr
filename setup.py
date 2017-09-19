@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017, AL.
-# Distributed under the LGPLv3 License. See LICENSE for more info.
+# Copyright (c) 2017, Anders Lervik.
+# Distributed under the LGPLv2.1+ License. See LICENSE for more info.
 """
-pytrr - A simulation package for rare event simulations.
-Copyright (C) 2017, AL.
+pytrr - A library for reading GROMACS .trr files.
+Copyright (C) 2017, Anders Lervik.
 
 This file is part of pytrr.
 
 pytrr is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+the Free Software Foundation, either version 2.1 of the License, or
 (at your option) any later version.
 
 pytrr is distributed in the hope that it will be useful,
@@ -35,30 +35,56 @@ def get_long_description():
     return long_description
 
 
-FULL_VERSION = '0.3.0'  # copied from version.py generated.
+def get_version():
+    """Read the version from version.py"""
+    here = os.path.abspath(os.path.dirname(__file__))
+    filename = os.path.join(here, 'pytrr', 'version.py')
+    with openc(filename, encoding='utf-8') as fileh:
+        for lines in fileh:
+            if lines.startswith('FULL_VERSION ='):
+                version = ast.literal_eval(lines.split('=')[1].strip())
+                return version
+    return 'unknown'
 
-setup(name='pytrr',
-      version=FULL_VERSION,
-      description='A package for reading GROMACS .trr files',
-      long_description=get_long_description(),
-      url='https://github.com/andersle/pytrr',
-      author='AL',
-      author_email='andersle@gmail.com',
-      license='LGPLv3',
-      classifiers=['Development Status :: 3 - Alpha',
-                   'Environment :: Console',
-                   'Intended Audience :: Science/Research',
-                   ('License :: OSI Approved :: '
-                    'GNU Lesser General Public License v3 (LGPLv3)'),
-                   'Natural Language :: English',
-                   'Operating System :: MacOS :: MacOS X',
-                   'Operating System :: POSIX',
-                   'Programming Language :: Python :: 3',
-                   'Programming Language :: Python :: 3.2',
-                   'Programming Language :: Python :: 3.3',
-                   'Programming Language :: Python :: 3.4',
-                   'Programming Language :: Python :: 3.5',
-                   'Topic :: Scientific/Engineering :: Physics'],
-      keywords='gromacs simulation trr',
-      packages=find_packages(),
-      install_requires=['numpy>=1.6.0',])
+
+def get_requirements():
+    """Read requirements.txt"""
+    here = os.path.abspath(os.path.dirname(__file__))
+    requirements = []
+    filename = os.path.join(here, 'requirements.txt')
+    with openc(filename, encoding='utf-8') as fileh:
+        for lines in fileh:
+            package = lines.split('>=')[1].strip()
+            requirements.append(lines.strip())
+    return requirements
+
+
+setup(
+    name='pytrr',
+    version=get_version(),
+    description='A package for reading GROMACS .trr files',
+    long_description=get_long_description(),
+    url='https://github.com/andersle/pytrr',
+    author='Anders Lervik',
+    author_email='andersle@gmail.com',
+    license='LGPLv2.1+',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Science/Research',
+        ('License :: OSI Approved :: '
+         'GNU Lesser General Public License v2 or later (LGPLv2+)'),
+        'Natural Language :: English',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: POSIX',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Topic :: Scientific/Engineering :: Physics'
+    ],
+    keywords='gromacs simulation trr',
+    packages=find_packages(),
+    install_requires=get_requirements(),
+)
