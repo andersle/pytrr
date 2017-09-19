@@ -1,6 +1,10 @@
 .. image:: https://travis-ci.org/andersle/pytrr.svg?branch=master
     :target: https://travis-ci.org/andersle/pytrr
 
+.. image:: https://coveralls.io/repos/github/andersle/pytrr/badge.svg?branch=master
+    :target: https://coveralls.io/github/andersle/pytrr?branch=master
+
+
 
 #####
 pytrr
