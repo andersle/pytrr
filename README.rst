@@ -10,9 +10,9 @@
 pytrr
 #####
 
-``pytrr`` is a python package for reading .trr [1]_ files from GROMACS [2]_.
+``pytrr`` is a Python package for reading .trr [1]_ files from GROMACS [2]_.
 
-``pytrr`` is intended as a lightweight, pure python, library for reading .trr
+``pytrr`` is intended as a lightweight, pure Python, library for reading .trr
 trajectories and it gives access to positions, velocities, etc.
 as numpy arrays.
 
