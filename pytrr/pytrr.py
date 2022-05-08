@@ -487,5 +487,4 @@ class GroTrrReader():
     def skip_data(self):
         """Just skip data."""
         self._skip = False
-        print(self.header)
         skip_trr_data(self.fileh, self.header)
